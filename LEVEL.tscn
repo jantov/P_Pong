@@ -1,0 +1,108 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://Oponente.gd" type="Script" id=1]
+[ext_resource path="res://LELVEL.gd" type="Script" id=2]
+[ext_resource path="res://Player.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Pelota.tscn" type="PackedScene" id=4]
+[ext_resource path="res://TIPO/InknutAntiqua-Medium.ttf" type="DynamicFontData" id=5]
+[ext_resource path="res://TIPO/InknutAntiqua-Bold.ttf" type="DynamicFontData" id=6]
+[ext_resource path="res://Reiniciar.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Reiniciar.gd" type="Script" id=8]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 50, 360 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 640, 50 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 20
+font_data = ExtResource( 5 )
+
+[sub_resource type="DynamicFont" id=4]
+font_data = ExtResource( 6 )
+
+[node name="LEVEL" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchor_bottom = 0.293
+margin_right = 1280.0
+margin_bottom = 720.0
+color = Color( 0.0431373, 0.0666667, 0.101961, 1 )
+
+[node name="Arco_izq" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Arco_izq"]
+position = Vector2( -50, 360 )
+shape = SubResource( 1 )
+
+[node name="Arco_der" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Arco_der"]
+position = Vector2( 1330, 360 )
+shape = SubResource( 1 )
+
+[node name="Barrera_Sup" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Barrera_Sup"]
+position = Vector2( 640, -50 )
+shape = SubResource( 2 )
+
+[node name="Barrera_Inf" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Barrera_Inf"]
+position = Vector2( 640, 770 )
+shape = SubResource( 2 )
+
+[node name="Player" parent="." instance=ExtResource( 3 )]
+position = Vector2( 50, 280 )
+
+[node name="IA_Oponente" parent="." instance=ExtResource( 3 )]
+position = Vector2( 1230, 280 )
+script = ExtResource( 1 )
+
+[node name="Pelota" parent="." instance=ExtResource( 4 )]
+position = Vector2( 640, 360 )
+
+[node name="Marcador_player" type="Label" parent="."]
+margin_left = -200.0
+margin_right = 1280.0
+margin_bottom = 720.0
+custom_colors/font_color = Color( 0.54902, 0.764706, 0.992157, 1 )
+custom_fonts/font = SubResource( 3 )
+text = "Player"
+align = 1
+valign = 1
+
+[node name="Marcador_IA" type="Label" parent="."]
+margin_left = 200.0
+margin_right = 1280.0
+margin_bottom = 720.0
+custom_colors/font_color = Color( 0.54902, 0.764706, 0.992157, 1 )
+custom_fonts/font = SubResource( 3 )
+text = "IA"
+align = 1
+valign = 1
+
+[node name="Res_Timer" type="Timer" parent="."]
+
+[node name="Tiempo" type="Label" parent="."]
+margin_right = 1280.0
+margin_bottom = 50.0
+custom_colors/font_color = Color( 0.596078, 0.792157, 0.247059, 1 )
+custom_fonts/font = SubResource( 4 )
+text = "Tiempo"
+align = 1
+valign = 1
+
+[node name="Reiniciar" parent="." instance=ExtResource( 7 )]
+pause_mode = 2
+margin_left = 10.0
+margin_top = 680.0
+margin_bottom = 707.0
+script = ExtResource( 8 )
+
+[connection signal="body_entered" from="Arco_izq" to="." method="_on_Arco_izq_body_entered"]
+[connection signal="body_entered" from="Arco_der" to="." method="_on_Arco_der_body_entered"]
+[connection signal="timeout" from="Res_Timer" to="Pelota" method="_on_Res_Timer_timeout"]
